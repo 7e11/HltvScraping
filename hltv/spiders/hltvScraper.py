@@ -3,11 +3,15 @@ import scrapy
 from hltv.items import HltvItem
 
 class HltvSpider(scrapy.Spider):
+    offsetCounter = 0
     name = "hltv"
     allowed_domains = ["hltv.org"]
-    start_urls = [
-        "http://www.hltv.org/?pageid=188&offset=0",
-    ]
+    # start_urls = [
+    #     "http://www.hltv.org/?pageid=188&offset=0",
+    # ]
+    def start_requests(self):
+        for i in xrange(292):
+            yield self.make_requests_from_url("http://www.hltv.org/?pageid=188&offset=" + str(i*50))
 
     def parse(self, response):
         for sel in response.xpath('//div[contains(@style,"padding-left:5px;padding-top:5px;")]'):
